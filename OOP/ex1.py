@@ -159,4 +159,131 @@
 # del p.age
 # print(p.__dict__)
 
-# __________________________________________________________
+# ______________________________________________ инициализатор (__init__)и объекты свойства (property)
+# from string import ascii_letters
+
+# class Person:
+#   S_RUS = 'йцукенгшщзхъфывапролджэячсмитьбю-'
+#   S_RUS_UPPER = S_RUS.upper()
+
+#   def __init__(self, fio, ps, age, weight):
+#     self.verify_fio(fio)
+#     # self.verify_ps(ps)
+#     # self.verify_age(age)
+#     # self.verify_weight(weight)
+    
+#     self.__fio = fio
+#     self.age = age          #|
+#     self.ps = ps            #| вызываются объекты property (свойства) и в них делается проверка 
+#     self.weight = weight    #| 
+
+#   @classmethod
+#   def verify_fio(cls, fio):
+
+#     if type(fio) != str:
+#       raise TypeError("ФИО должно быть строкой")
+    
+#     f = fio.split()
+#     if len(f) != 3:
+#       raise TypeError("Неверный формат ФИО")
+    
+#     letters = ascii_letters + cls.S_RUS + cls.S_RUS_UPPER
+
+#     for s in f:
+#       if len(s) < 1:
+#         raise TypeError("В ФИО должен быть хотя бы один символ")
+#       if len(s.strip(letters)) != 0:
+#         raise TypeError("В ФИО можно использовать только буквенные символы и дефис")
+      
+#     print("\nФИО подтверждены")
+      
+#   @classmethod
+#   def verify_age(cls, age):
+#     if type(age) == int and 14 < age < 100:
+#       print("Возраст подтверждён")
+#     else:
+#       raise TypeError("Возраст должен быть целым числом в диапазоне [14, 100]")
+    
+#   @classmethod
+#   def verify_weight(cls, weight):
+#     if type(weight) == float and 20 < weight < 200:
+#       print("Вес подтверждён\n")
+#     else:
+#       raise TypeError("Вес должен быть десятичным числом в диапазоне [20, 200]")
+    
+#   @classmethod
+#   def verify_ps(cls, ps):
+#     if type(ps) != str:
+#       raise TypeError("Паспорт должен быть строкой")
+#     p = ps.split()
+#     if len(p) != 2 or len(p[0]) != 4 or len(p[1]) != 6:
+#       raise TypeError("Неверный формат паспорта. (Правильный формат: хххх хххххх, где х - это цифра)")
+#     for s in p:
+#       if not s.isdigit():
+#         raise TypeError("Серия и номер паспорта должны быть числами")
+#     print("Паспорт подтверждён")
+
+#   @property
+#   def fio(self):
+#     return self.__fio
+  
+#   @property
+#   def ps(self):
+#     return self.__ps
+  
+#   @ps.setter
+#   def ps(self, ps):
+#     self.verify_ps(ps)
+#     self.__ps = ps
+
+#   @property
+#   def age(self):
+#     return self.__age
+  
+#   @age.setter
+#   def age(self, age):
+#     self.verify_age(age)
+#     self.__age = age
+
+#   @property
+#   def weight(self):
+#     return self.__weight
+  
+#   @weight.setter
+#   def weight(self, weight):
+#     self.verify_weight(weight)
+#     self.__weight = weight
+    
+
+# p = Person('Hey Hello Привет', "1234 123456", 22, 68.2)
+
+# ______________________________________________________________________________ Дискриптор
+class Integer:
+  @classmethod
+  def verify_coord(cls, coord):
+    if type(coord) != int:
+      raise TypeError("")
+    
+  def __set_name__(self, owner, name):
+    self.name = '_' + name
+
+  def __get__(self, instance, owner):
+    return getattr(instance, self.name) # ==  return instance.__dict__[self.name]
+  
+  def __set__(self, instance, value):
+    self.verify_coord(value)
+    print(f"__set__: {self.name} = {value}")
+    setattr(instance, self.name, value) # ==  instance.__dict__[self.name] = value
+
+
+class Point3D:
+  x = Integer()
+  y = Integer()
+  z = Integer()
+
+  def __init__(self, x, y, z):
+    self.x = x
+    self.y = y
+    self.z = z
+
+# _________________________________________________________________________________
