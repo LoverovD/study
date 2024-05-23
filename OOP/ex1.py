@@ -258,32 +258,191 @@
 # p = Person('Hey Hello Привет', "1234 123456", 22, 68.2)
 
 # ______________________________________________________________________________ Дискриптор
-class Integer:
-  @classmethod
-  def verify_coord(cls, coord):
-    if type(coord) != int:
-      raise TypeError("")
+# class Integer:
+#   @classmethod
+#   def verify_coord(cls, coord):
+#     if type(coord) != int:
+#       raise TypeError("")
     
-  def __set_name__(self, owner, name):
-    self.name = '_' + name
+#   def __set_name__(self, owner, name):
+#     self.name = '_' + name
 
-  def __get__(self, instance, owner):
-    return getattr(instance, self.name) # ==  return instance.__dict__[self.name]
+#   def __get__(self, instance, owner):
+#     return getattr(instance, self.name) # ==  return instance.__dict__[self.name]
   
-  def __set__(self, instance, value):
-    self.verify_coord(value)
-    print(f"__set__: {self.name} = {value}")
-    setattr(instance, self.name, value) # ==  instance.__dict__[self.name] = value
+#   def __set__(self, instance, value):
+#     self.verify_coord(value)
+#     print(f"__set__: {self.name} = {value}")
+#     setattr(instance, self.name, value) # ==  instance.__dict__[self.name] = value
 
 
-class Point3D:
-  x = Integer()
-  y = Integer()
-  z = Integer()
+# class Point3D:
+#   x = Integer()
+#   y = Integer()
+#   z = Integer()
 
-  def __init__(self, x, y, z):
-    self.x = x
-    self.y = y
-    self.z = z
+#   def __init__(self, x, y, z):
+#     self.x = x
+#     self.y = y
+#     self.z = z
 
-# _________________________________________________________________________________
+# _____________________________________________________________________________ __call__
+
+# class Counter:
+#   def __init__(self):
+#     self.__counter = 0
+
+#   def __call__(self, *args, **kwargs):
+#     print("__call__")
+#     self.__counter += 1
+#     return self.__counter
+  
+
+# c = Counter()
+# c2 = Counter()
+# c()
+# c()
+# c()
+# print(c(), c2())
+
+# _________________
+
+# class Strip_Chars:
+#   def __init__(self, chars: str = " "):
+#     self.__chars = chars
+
+#   def __call__(self, *args, **kwargs):
+#     if not isinstance(args[0], str):
+#       raise TypeError ("First argument must be str")
+#     return args[0].strip(self.__chars)
+  
+
+# strip_1 = Strip_Chars(",.?!;: ")
+# print(strip_1("..,Hey!?"))
+
+# _________________ Замыкание функций
+# def strip_chars(chars = ' '):
+#   def do_strip(new_string):
+#     return new_string.strip(chars)
+#   return do_strip
+
+# strip_1 = strip_chars()
+# strip_2 = strip_chars(".,:;!? ")
+
+# print(strip_1(" !!    Hello strip!! .   ,!!? "))
+# print(strip_2("!!    Hello strip!! .   ,!!?"))
+
+# ____________________________________________________________ dunder methods (__len__, __abs__)
+
+# class Point:
+#   def __init__(self, *args: int):
+#     self.__coords = args
+
+#   def __len__(self):
+#     return len(self.__coords)
+  
+#   def __abs__(self):
+#     return list(map(abs, self.__coords))
+  
+
+# p = Point(1, -5, 2)
+# print(f"{len(p)}\n{abs(p)}")
+
+# ___________________________________________________________ dunder methods (add, radd, iadd) 
+
+# class Clock:
+#   __DAY = 86400
+#   def __init__(self, seconds: int):
+#     if not isinstance(seconds, int):
+#       raise TypeError("Seconds must be int value")
+#     self.__seconds = seconds % self.__DAY
+
+#   def get_time(self):
+#     s = self.__seconds % 60
+#     m = (self.__seconds // 60) % 60
+#     h = (self.__seconds // 3600) % 24
+#     print(f"{self.__get_formatted(h)}:{self.__get_formatted(m)}:{self.__get_formatted(s)}")
+
+#   @classmethod
+#   def __get_formatted(cls, x):
+#     return str(x).rjust(2, '0')
+  
+#   def __add__(self, other):
+#     if not isinstance(other, (int, Clock)):
+#       raise ArithmeticError ("Right argument must be int or Clock value")
+#     print("\n__add__")
+    
+#     sh = other
+#     if isinstance(sh, Clock):
+#       sh = other.__seconds
+
+#     return Clock(self.__seconds + sh)
+  
+#   def __radd__(self, other):
+#     print("\n__radd__")
+#     return self + other
+  
+#   def __iadd__(self, other):
+#     print("\n__iadd__")
+#     return self + other
+  
+
+# time = Clock(3000) #  50 min
+# time += 3000
+# time_2 = Clock(1500) #  25 min
+# time.get_time()
+# time += time_2
+# time.get_time()
+# time = (-3000) + time
+# time.get_time()
+
+# __________________________________________________________________ dunder methods (getitem, setitem)
+
+# class Student:
+#   def __init__(self, name: str, marks: list):
+#     self.name = name
+#     self.marks = list(marks)
+
+#   def __getitem__(self, number):
+#     if 0 <= number < len(self.marks):
+#       return self.marks[number]
+#     else:
+#       raise IndexError ("\n\nInvaild index")
+    
+#   def __setitem__(self, number, value):
+#     if not isinstance(value, int) or (10 < value < 0):
+#       raise ValueError ("\n\nThe value of mark must be int [0, 10]")
+#     if number < 0:
+#       raise IndexError('Index < 0 out of range')
+#     if number >= len(self.marks):
+#       off = number + 1 - len(self.marks) 
+#       self.marks.extend([None]*off)
+    
+#     self.marks[number] = value
+#     print(f"Value marks[{number}] is changed to {value}")
+    
+      
+  
+#   def __delitem__(self, number):
+#     if 0 <= number < len(self.marks):
+#       del(self.marks[number])
+#       print(f"Value marks[{number}] is deleted")
+#     else:
+#       raise IndexError ("\n\nInvaild index")
+
+
+# student_1 = Student('Daniil', [5, 5, 3, 1, 6, 6,])
+# print(f"\n{student_1.marks}")
+# print(f"old value = {student_1[0]}\n")
+# student_1[0] = 0
+# print(f"\n{student_1.marks}")
+# print(f"changed value = {student_1[0]}\n")
+# del(student_1[0])
+# print(f"\n{student_1.marks}")
+# print(f"new value with [0] index = {student_1[0]}\n")
+# student_1[10] = 6
+# print(f"{student_1.marks}\n")
+
+# ________________________________________________________________________  Наследование
+
+
