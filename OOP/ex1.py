@@ -445,4 +445,194 @@
 
 # ________________________________________________________________________  Наследование
 
+# class Geom:
+#   def __init__(self, x1: int=0, x2: int=0, y1: int=0, y2: int=0):
+#     self._x1 = x1
+#     self._x2 = x2
+#     self._y1 = y1
+#     self._y2 = y2
+
+#   def search_pr(self):
+#     raise IndentationError(f"{self.__name__} _search_pr method needs to be overridden")
+  
+#   def draw_figure(self):
+#     print(f"{self.__class__} _draw_figure method needs to be overridden")
+
+# class Rectangle(Geom):
+#   def __init__(self, x1, x2):
+#     super().__init__(x1, x2)
+
+#   def search_pr(self):
+#     return (self._x1+self._x2)*2
+  
+#   def draw_figure(self):
+#     print("Drawing rectangle")
+  
+# class Square(Geom):
+#   def __init__(self, x1):
+#     super().__init__(x1)
+
+#   def search_pr(self):
+#     return (self._x1*4)
+
+
+# geom = [ Rectangle(1, 2),
+# Rectangle(5, 6),
+# Square(2),
+# Square(4)
+# ]
+
+# for g in geom:
+#   print(f"\n{g.search_pr()}")
+#   g.draw_figure()
+
+# _______________________________________________________________ super()
+
+# class Goods:
+#   def __init__(self, name: str = "Noname", price: int = 0, weight: float = 0.0):
+#     super().__init__()
+#     self._name = name
+#     self._price = price
+#     self._weight = weight
+#     print("Goods __init__")
+
+#   def print_info(self):
+#     print(f"\nname: {self._name}\nprice: {self._price}\nweight: {self._weight}\n")
+
+# class Sales_ID:
+#   ID = 1
+
+#   def __init__(self):
+#     self._id = self.ID
+#     self.ID += 1
+#     print("Sales_ID __init__")
+
+#   def print_info(self):
+#     print(f"id of sales operation is {self._id}")
+
+# class NoteBook(Goods, Sales_ID):
+#   def print_id(self):
+#     Sales_ID.print_info(self)
+
+
+# print(f"\nПорядок наследований и вызова функций super() класса NoteBook: {NoteBook.__mro__}\n\n")
+# n1 = NoteBook("Asr", 3000, 1.2)
+# n2 = NoteBook("Asus", 40000, 5.5)
+# n1.print_info()
+# n1.print_id()
+# n2.print_info()
+# n2.print_id()
+
+# ______________________________________________________ __slots__ and property при наследовании
+
+# class Point2D:
+#   __slots__ = ('_x', '_y', '_lenth')
+
+#   def __init__(self, x: int = 0, y: int = 0):
+#     self._x = x
+#     self._y = y
+#     self._lenth = (x+x)*(y+y)
+#     print("Point2D __init__")
+
+#   @property
+#   def lenth(self):
+#     print(f"{self._lenth}\n")
+#     return self._lenth
+  
+#   @lenth.setter
+#   def lenth(self, value):
+#     self._lenth = value
+#     print(f"_lenth = {value}")
+    
+
+
+# class Point3D(Point2D):
+#   __slots__ = '_z',
+
+#   def __init__(self, x: int = 0, y: int = 0, z: int = 0):
+#     super().__init__(x, y)
+#     self._z = z
+#     self._lenth = (int(self._lenth) * (z+z))
+#     print("Point3D __init__")
+
+  
+# p3 = Point3D(1, 2, 2)
+# p3.lenth
+# p2 = Point2D(1, 2)
+# p2.lenth
+# p2.lenth = 100
+# p2.lenth
+
+# ________________________________ различия __slots__ и __dict__
+
+
+
+# import timeit
+
+# class Point:
+
+#   def __init__(self, x: int = 0, y: int = 0):
+#     self._x = x
+#     self._y = y
+#     print("Point __init__")
+
+#   def calc(self):
+#     self._x +=1
+#     del self._y
+#     self._y = 0
+
+
+# class Point_slots:
+#   __slots__ = ('_x', '_y')
+
+#   def __init__(self, x: int = 0, y: int = 0):
+#     self._x = x
+#     self._y = y
+#     print("Point_slots __init__")
+
+#   def calc(self):
+#     self._x +=1
+#     del self._y
+#     self._y = 0
+
+  
+# p1 = Point(1, 2)
+# p2 = Point_slots(1, 2)
+# print(f"\nОбъём занимаемой памяти объекта класса с __dict__ = {p1.__sizeof__() + p1.__dict__.__sizeof__()}")
+# print(f"Объём занимаемой памяти объекта класса с __slots__ = {p2.__sizeof__()}\n")
+
+# t1 = timeit.timeit(p1.calc)
+# t2 = timeit.timeit(p2.calc)
+# print(f"\nСкорость реализации объекта класса с __dict__ = {t1}")
+# print(f"Скорость реализации объекта класса с __slots__ = {t2}\n")
+
+# ________________
+
+# import timeit
+
+# rows = 5
+# cols = 10
+
+# def calc_short_top():
+#   iterations = 0
+#   for i in range(rows):
+#     for j in range(cols):
+#       iterations += 1
+#   return iterations
+
+# def calc_long_top():
+#   iterations = 0
+#   for i in range(cols):
+#     for j in range(rows):
+#       iterations += 1
+#   return iterations
+
+
+# short_time = timeit.timeit(calc_short_top)
+# long_time = timeit.timeit(calc_long_top)
+
+# print((short_time, long_time))
+
+# ___________________________________________________________
+
 
