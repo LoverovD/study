@@ -633,6 +633,110 @@
 
 # print((short_time, long_time))
 
-# ___________________________________________________________
+# ___________________________________________________________ Exception
+
+# class PrintError(Exception):
+#   """ Общий класс исключений принтера """
 
 
+# class PrintSendDataError(PrintError):
+#   """ Класс исключений при отправке данных принтеру """
+#   def __init__(self, *args):
+#     self._message = args[0] if args else None
+
+#   def __str__(self):
+#     print(f"Ошибка: {self._message}")
+
+
+# class PrintData:
+#   def print(self, data):
+#     self.send_data(data)
+#     print(f"Печать: {str(data)}")
+
+#   def send_data(self, data):
+#     if not self.send_to_print(data):
+#       raise PrintSendDataError("принтер не отвечает")
+
+#   def send_to_print(self, data):
+#     if data:
+#       return True
+#     else:
+#       return False
+
+
+# p = PrintData()
+# p.print('')
+
+# _____________________________________________________________________ Работа с файлами
+
+# fp = None
+# try:
+#   fp = open("README.txt")
+#   for f in fp:
+#     print (f)
+# except Exception as e:
+#   print(e)
+# finally:
+#   if fp is not None:
+#     fp.close()
+
+# ________________________ Менеджер контекста
+
+# fp = None
+# try:
+#   with open("README.txt") as fp:
+#     for f in fp:
+#       print (f)
+# except Exception as e:
+#   print(e)
+
+# ________________________
+# class DefendVector:
+#   def __init__(self, vector):
+#     self.__v = vector
+
+#   def __enter__(self):
+#     self.__temp = self.__v[:] # создаём копию вектора, что бы не изменять его в случае возникновения ошибок
+#     return self.__temp
+  
+#   def __exit__(self, exc_type, exc_val, exc_tb):
+#     if exc_type is None:
+#       self.__v[:] = self.__temp
+
+#       return False # когда exit возвращает False ошибки не обрабатываются внутри менеджера контекста
+
+# v1 = [1, 2, 3, 4]
+# v2 = [2, 3, 4]
+
+# try:
+#   with DefendVector(v1) as dv:
+#     for i, value_trash in enumerate(dv): # перебирает элементы dv (возвращает индекс (i) и значение (value_))
+#       dv[i] += v2[i]
+# except:
+#   print("Error")
+
+# print(v1)
+
+# ____________________________________________________________ Data Classes
+
+# from dataclasses import dataclass, field, InitVar
+# # функция field позволяет тонко настраивать поведение атрибутов
+# @dataclass
+# class V3D:
+#   x: int = 0
+#   y: int = 0
+#   z: int = 0
+#   calc_len: InitVar[bool] = True # параметр аннотированный InitVar автоматически передаётся в __post_init__
+#   lenth: float = field(init=False, default=0) # убирает параметр из инициализатора
+
+#   def __post_init__(self, calc_len: bool):
+#     if calc_len:
+#       self.lenth = (self.x * self.x + self.y * self.y + self.z * self.z) ** 0.5
+
+
+# v = V3D(2, 3, 2)
+# print(v)
+# v_false = V3D(2, 3, 2, False)
+# print(v_false)
+
+# ____________________________________________________________________________________________________________
